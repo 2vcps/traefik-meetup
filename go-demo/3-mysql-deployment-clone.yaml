@@ -1,0 +1,67 @@
+apiVersion: v1 
+kind: Service
+metadata:
+  name: gowebapp-mysql-clone 
+  labels:
+    run: gowebapp-mysql
+    tier: backend 
+spec:
+  type: ClusterIP
+  ports:
+  - port: 3306
+    targetPort: 3306 
+  selector:
+    run: gowebapp-mysql-clone
+    tier: backend
+---
+apiVersion: apps/v1 
+kind: Deployment 
+metadata:
+  name: gowebapp-mysql-clone 
+  labels:
+    run: gowebapp-mysql
+    tier: backend 
+spec:
+  replicas: 1 
+  strategy:
+    type: Recreate 
+  selector:
+    matchLabels:
+      run: gowebapp-mysql 
+      tier: backend
+  template: 
+    metadata: 
+      labels:
+        run: gowebapp-mysql
+        tier: backend 
+    spec:
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: mysql-claim-clone
+      containers:
+      - name: gowebapp-mysql-clone 
+        env:
+        - name: MYSQL_ROOT_PASSWORD 
+          value: purestorage
+        image: jowings/gowebapp-mysql:0.3
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: data
+          mountPath: "/var/lib/mysql"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-claim-clone
+spec:
+  storageClassName: pure-block
+  accessModes:
+    - ReadWriteOnce
+  dataSource:
+    kind: PersistentVolumeClaim
+    name: mysql-claim
+  resources:
+    requests:
+      storage: 200Gi

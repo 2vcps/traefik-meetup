@@ -1,0 +1,14 @@
+# This is already included in the 4-gowebapp-deployment-clone.yaml but broken out for reference
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: clone-goweb-ingress
+spec:
+  rules:
+  - host: clone.dev.fsa.lab
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: gowebapp-clone
+          servicePort: 80

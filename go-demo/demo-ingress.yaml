@@ -1,0 +1,14 @@
+# This is already included in the 2-gowebapp-deployment.yaml but broken out for reference
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: goweb-ingress
+spec:
+  rules:
+  - host: go.dev.fsa.lab
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: gowebapp
+          servicePort: 80
