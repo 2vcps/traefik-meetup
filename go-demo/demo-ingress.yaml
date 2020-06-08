@@ -1,14 +1,16 @@
 # This is already included in the 2-gowebapp-deployment.yaml but broken out for reference
-apiVersion: extensions/v1beta1
-kind: Ingress
+
+kind: IngressRoute
+apiVersion: traefik.containo.us/v1alpha1
 metadata:
   name: goweb-ingress
 spec:
-  rules:
-  - host: go.dev.fsa.lab
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: gowebapp
-          servicePort: 80
+  entryPoints:
+    - web
+    - websecure
+  routes:
+  - match: Host(`go.dev.fsa.lab`)
+    kind: Rule
+    services:
+    - name: gowebapp
+      port: 80

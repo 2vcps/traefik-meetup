@@ -41,17 +41,17 @@ spec:
         ports:
         - containerPort: 80
 ---
-apiVersion: extensions/v1beta1
-kind: Ingress
+kind: IngressRoute
+apiVersion: traefik.containo.us/v1alpha1
 metadata:
   name: clone-goweb-ingress
 spec:
-  rules:
-  - host: clone.dev.fsa.lab
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: gowebapp-clone
-          servicePort: 80
-
+  entryPoints:
+    - web
+    - websecure
+  routes:
+  - match: Host(`clone-go.dev.fsa.lab`)
+    kind: Rule
+    services:
+    - name: gowebapp-clone
+      port: 80

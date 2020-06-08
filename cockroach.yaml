@@ -92,11 +92,11 @@ spec:
                 -
                   matchExpressions:
                     -
-                      key: topology.purestorage.com/az
+                      key: topology.purestorage.com/dinner
                       operator: In
                       values:
-                        - east
-                        - west
+                        - burgers
+                        - tacos
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 100
@@ -177,3 +177,18 @@ spec:
       resources:
         requests:
           storage: 100Gi
+---
+kind: IngressRoute
+apiVersion: traefik.containo.us/v1alpha1
+metadata:
+  name: cockroachdb-ingress
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+  - match: Host(`crdb.dev.fsa.lab`)
+    kind: Rule
+    services:
+    - name: cockroachdb-public
+      port: 8080
