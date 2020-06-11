@@ -47,7 +47,7 @@ spec:
         - --entryPoints.websecure.address=:443
 
         # permanent redirecting of all requests on http (80) to https (443)
-        # - --entrypoints.web.http.redirections.entryPoint.to=websecure
+        - --entrypoints.web.http.redirections.entryPoint.to=websecure
         - --entrypoints.websecure.http.tls.certResolver=default
 
         # Let's Encrypt Configurtion:
