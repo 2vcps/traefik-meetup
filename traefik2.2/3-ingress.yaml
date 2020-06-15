@@ -11,7 +11,7 @@ spec:
     - web
     - websecure
   routes:
-  - match: Host(`traefik.dev.fsa.lab`)
+  - match: Host(`traefik.dev.2vcps.io`)
     kind: Rule
     services:
     - name: api@internal
